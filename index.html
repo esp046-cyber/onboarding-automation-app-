@@ -1,0 +1,2485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Onboarding Automation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 1%;
+            color: #1a202c;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 1%;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px 5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .content {
+            padding: 1%;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px 1%;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #2d3748;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p, .card li {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+
+        .card ul {
+            margin-left: 15px;
+            margin-top: 8px;
+        }
+
+        .card li {
+            margin-bottom: 6px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #68d391;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tool-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            font-size: 11px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .metric-box h4 {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .metric-box .value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .footer {
+            background: #f7fafc;
+            padding: 15px 1%;
+            text-align: center;
+            font-size: 10px;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .icon {
+            font-size: 16px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 2026 Onboarding Automation</h1>
+            <p>AI-Powered SaaS Automation Guide</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">Overview</button>
+            <button class="nav-tab" onclick="showSection('quickstart')">5-Min Start</button>
+            <button class="nav-tab" onclick="showSection('first-automation')">First Auto</button>
+            <button class="nav-tab" onclick="showSection('chatbot')">Chatbot</button>
+            <button class="nav-tab" onclick="showSection('email-templates')">Templates</button>
+            <button class="nav-tab" onclick="showSection('zapier-tutorial')">Zapier</button>
+            <button class="nav-tab" onclick="showSection('checklist-generator')">Checklist</button>
+            <button class="nav-tab" onclick="showSection('glossary')">Glossary</button>
+            <button class="nav-tab" onclick="showSection('cost-calculator')">Calculator</button>
+            <button class="nav-tab" onclick="showSection('video-tutorials')">Videos</button>
+            <button class="nav-tab" onclick="showSection('resources')">Resources</button>
+            <button class="nav-tab" onclick="showSection('setup')">Setup</button>
+            <button class="nav-tab" onclick="showSection('ai-tools')">AI Tools</button>
+            <button class="nav-tab" onclick="showSection('automation')">Automation</button>
+            <button class="nav-tab" onclick="showSection('metrics')">Metrics</button>
+        </div>
+
+        <div class="content">
+            <!-- Overview Section -->
+            <div id="overview" class="section active">
+                <div class="metric-box">
+                    <h4>Automation ROI in 2026</h4>
+                    <div class="value">87%</div>
+                    <p style="font-size: 11px; margin-top: 5px;">Average time saved with AI onboarding</p>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">🎯</span> What is Onboarding Automation?</h3>
+                    <p>Automated onboarding uses AI and workflow automation to streamline new user acquisition, reducing manual tasks and accelerating time-to-value for SaaS products.</p>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">💡</span> Why It Matters in 2026</h3>
+                    <ul>
+                        <li>Users expect instant, personalized experiences</li>
+                        <li>AI can predict user needs and customize flows</li>
+                        <li>Automation reduces customer acquisition costs by 60%</li>
+                        <li>24/7 intelligent support improves conversion rates</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">🚀</span> Key Benefits</h3>
+                    <div style="margin-top: 10px;">
+                        <span class="badge">Faster Setup</span>
+                        <span class="badge">Higher Conversion</span>
+                        <span class="badge">Lower Churn</span>
+                        <span class="badge">Scalability</span>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>💡 2026 Tip:</strong> Combine LLMs with workflow automation for hyper-personalized onboarding journeys that adapt in real-time.
+                </div>
+            </div>
+
+            <!-- 5-Minute Quickstart Section -->
+            <div id="quickstart" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">🚀</span> Get Started in 5 Minutes!</h3>
+                    <p style="color: white;">Follow this beginner-friendly checklist to launch your first automation today.</p>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">✓</span> Step 1: Choose Your Goal (30 sec)</h3>
+                    <p>Pick ONE thing to automate first:</p>
+                    <div style="margin-top: 10px;">
+                        <label style="display: block; padding: 8px; background: white; border: 2px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                            <input type="radio" name="goal" style="margin-right: 8px;">
+                            📧 Send welcome emails automatically
+                        </label>
+                        <label style="display: block; padding: 8px; background: white; border: 2px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                            <input type="radio" name="goal" style="margin-right: 8px;">
+                            💬 Add AI chatbot to website
+                        </label>
+                        <label style="display: block; padding: 8px; background: white; border: 2px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                            <input type="radio" name="goal" style="margin-right: 8px;">
+                            📊 Track user signups in spreadsheet
+                        </label>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">✓</span> Step 2: Sign Up for Free Tools (2 min)</h3>
+                    <p>Create free accounts (no credit card needed):</p>
+                    <ul>
+                        <li><strong>Zapier Free:</strong> <a href="https://zapier.com" target="_blank" style="color: #667eea;">zapier.com</a> - Connect apps</li>
+                        <li><strong>Gmail:</strong> For sending emails</li>
+                        <li><strong>Google Sheets:</strong> For tracking data</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>💡 Tip:</strong> Use your work email for better organization
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">✓</span> Step 3: Use a Template (1 min)</h3>
+                    <p>Don't start from scratch! Use pre-built templates:</p>
+                    <div class="code-block">
+1. Go to Zapier.com
+2. Search: "new user onboarding"
+3. Click "Use this Zap"
+4. Follow the setup wizard
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>Popular templates:</strong></p>
+                    <ul style="font-size: 11px;">
+                        <li>"Send welcome email when user signs up"</li>
+                        <li>"Add new signups to Google Sheets"</li>
+                        <li>"Notify Slack when user completes onboarding"</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">✓</span> Step 4: Customize & Test (1.5 min)</h3>
+                    <p>Make it yours:</p>
+                    <ul>
+                        <li><strong>Replace text:</strong> Change "Hi there" to your brand voice</li>
+                        <li><strong>Add your logo:</strong> Upload to email template</li>
+                        <li><strong>Test it:</strong> Use your own email to test</li>
+                    </ul>
+                    <div class="code-block">
+⚠️ Always test with YOUR email first!
+✅ Check: Does it look good?
+✅ Check: Are links working?
+✅ Check: Is timing right?
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">✓</span> Step 5: Turn It On! (30 sec)</h3>
+                    <p style="font-size: 13px; font-weight: 600; color: #10b981;">🎉 You're live! Your first automation is running!</p>
+                    <div style="margin-top: 10px; padding: 10px; background: #ecfdf5; border-radius: 8px;">
+                        <p style="font-size: 11px; margin-bottom: 8px;"><strong>What happens now:</strong></p>
+                        <ul style="font-size: 11px;">
+                            <li>New users automatically get welcomed</li>
+                            <li>You save 10+ minutes per signup</li>
+                            <li>Users feel valued immediately</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="metric-box" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <h4>🎯 Your Progress</h4>
+                    <div class="value">1/10</div>
+                    <p style="font-size: 11px; margin-top: 5px;">Automations Created - Keep going!</p>
+                </div>
+
+                <button class="btn" style="background: #10b981;" onclick="alert('🎉 Congrats! Now try the First Automation tutorial for more hands-on practice.')">✅ I Completed the 5-Min Start!</button>
+            </div>
+
+            <!-- First Automation Tutorial Section -->
+            <div id="first-automation" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">🎓</span> Your First Automation Tutorial</h3>
+                    <p style="color: white;">Build a complete welcome email automation from scratch - step by step!</p>
+                </div>
+
+                <div class="card">
+                    <h3>📋 What You'll Build</h3>
+                    <p>A smart system that automatically:</p>
+                    <ul>
+                        <li>Sends welcome email when user signs up</li>
+                        <li>Waits 24 hours, then sends tips email</li>
+                        <li>Tracks who opened emails</li>
+                        <li>Adds users to your CRM</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>⏱️ Time needed:</strong> 15-20 minutes<br>
+                        <strong>💰 Cost:</strong> 100% Free<br>
+                        <strong>🎯 Difficulty:</strong> Beginner-friendly
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">1</span> Create Your Trigger</h3>
+                    <p><strong>The trigger is what starts your automation.</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Open Zapier → "Create Zap"
+2. Search for YOUR signup tool
+   (e.g., Webflow, Typeform, Airtable)
+3. Select event: "New Response"
+   or "New Submission"
+4. Click "Connect" and sign in
+5. Test trigger with sample data
+                    </div>
+                    <div style="margin-top: 10px; padding: 10px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <p style="font-size: 11px;"><strong>💡 No signup form yet?</strong> Use Google Forms (free) or Tally.so (free) to collect signups.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">2</span> Add Welcome Email Action</h3>
+                    <p><strong>This sends the first email immediately.</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click "+ Add Action"
+2. Search: "Gmail" (or your email tool)
+3. Choose: "Send Email"
+4. Fill in fields:
+   
+   TO: [Use signup email from step 1]
+   SUBJECT: "Welcome to [Your SaaS]! 🎉"
+   BODY: See template below ↓
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>📧 Copy this email template:</strong></p>
+                    <div class="code-block" style="background: white; color: #2d3748; border: 2px solid #e2e8f0;">
+Subject: Welcome to [Your SaaS]! 🎉
+
+Hi [First Name],
+
+Thanks for signing up! We're excited 
+to have you on board.
+
+Here's what to do next:
+✅ Complete your profile
+✅ Explore the dashboard
+✅ Try your first [key feature]
+
+Need help? Just reply to this email!
+
+Best,
+[Your Name]
+[Your Company]
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">3</span> Add Time Delay</h3>
+                    <p><strong>Wait before sending the next email.</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click "+ Add Action"
+2. Search: "Delay"
+3. Choose: "Delay For"
+4. Set to: "1 day"
+5. That's it! ✅
+                    </div>
+                    <div class="highlight">
+                        <strong>⏰ Why wait?</strong> Gives users time to explore before sending more info. Prevents overwhelming them.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">4</span> Add Follow-up Email</h3>
+                    <p><strong>Send helpful tips 24 hours later.</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click "+ Add Action"
+2. Search: "Gmail" again
+3. Choose: "Send Email"
+4. Fill in fields (same as step 2)
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>📧 Follow-up email template:</strong></p>
+                    <div class="code-block" style="background: white; color: #2d3748; border: 2px solid #e2e8f0;">
+Subject: Quick tips to get started 💡
+
+Hi [First Name],
+
+Hope you're enjoying [Your SaaS]!
+
+Here are 3 quick tips:
+
+1. [Tip about key feature]
+2. [Common mistake to avoid]
+3. [Pro user secret]
+
+Watch this 2-min video: [link]
+
+Questions? I'm here to help!
+
+[Your Name]
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">5</span> Add to Spreadsheet (Optional)</h3>
+                    <p><strong>Track all signups automatically.</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Create Google Sheet with columns:
+   Name | Email | Signup Date | Status
+   
+2. In Zapier, add action:
+   "Google Sheets → Add Row"
+   
+3. Map fields from signup form
+   to sheet columns
+   
+4. Test it! ✅
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">6</span> Test Your Automation</h3>
+                    <p><strong>Always test before going live!</strong></p>
+                    <ul>
+                        <li>Use your own email to test signup</li>
+                        <li>Check: Did welcome email arrive?</li>
+                        <li>Wait: Did follow-up come 24h later?</li>
+                        <li>Verify: Did data appear in spreadsheet?</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>🐛 Common issues:</strong> Wrong email field, formatting errors, permissions not granted. Check Zapier task history to debug!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">7</span> Turn It On & Monitor</h3>
+                    <p><strong>Your automation is ready!</strong></p>
+                    <div style="padding: 15px; background: #ecfdf5; border-radius: 8px; margin-top: 10px;">
+                        <p style="font-size: 12px; font-weight: 600; color: #059669; margin-bottom: 8px;">✅ Checklist before launching:</p>
+                        <ul style="font-size: 11px;">
+                            <li>☑️ Tested with your own email</li>
+                            <li>☑️ Checked all links work</li>
+                            <li>☑️ Fixed typos in emails</li>
+                            <li>☑️ Verified timing is correct</li>
+                            <li>☑️ Turned on the Zap</li>
+                        </ul>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>📊 Monitor for first week:</strong> Check Zapier task history daily to ensure everything runs smoothly.</p>
+                </div>
+
+                <button class="btn" style="background: #f59e0b;" onclick="alert('🎉 Amazing work! You just built your first automation. Try the Chatbot tutorial next!')">🏆 I Built My First Automation!</button>
+            </div>
+
+            <!-- AI Chatbot Builder Section -->
+            <div id="chatbot" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">🤖</span> Build Your AI Chatbot (No-Code)</h3>
+                    <p style="color: white;">Create an intelligent assistant that answers questions 24/7 - no coding required!</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 What You'll Create</h3>
+                    <p>An AI chatbot that can:</p>
+                    <ul>
+                        <li>Answer common questions instantly</li>
+                        <li>Guide users through onboarding</li>
+                        <li>Collect user information</li>
+                        <li>Escalate to human when needed</li>
+                    </ul>
+                    <div class="metric-box" style="margin-top: 10px;">
+                        <h4>Expected Results</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; text-align: left;">
+                            <div>
+                                <div class="value" style="font-size: 16px;">-60%</div>
+                                <div style="font-size: 10px;">Support Tickets</div>
+                            </div>
+                            <div>
+                                <div class="value" style="font-size: 16px;">24/7</div>
+                                <div style="font-size: 10px;">Availability</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">1</span> Choose Your Platform</h3>
+                    <p><strong>Best free/cheap options for beginners:</strong></p>
+                    <div class="tool-grid">
+                        <div class="tool-item" style="background: #f0fdf4; border-color: #10b981;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">💬</div>
+                            <strong>Tidio</strong><br>
+                            <span style="font-size: 10px;">Free forever plan</span>
+                        </div>
+                        <div class="tool-item" style="background: #fef3c7; border-color: #f59e0b;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">🎨</div>
+                            <strong>Tawk.to</strong><br>
+                            <span style="font-size: 10px;">100% Free</span>
+                        </div>
+                        <div class="tool-item" style="background: #ede9fe; border-color: #8b5cf6;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">🔮</div>
+                            <strong>Crisp</strong><br>
+                            <span style="font-size: 10px;">Free + AI add-on</span>
+                        </div>
+                        <div class="tool-item" style="background: #dbeafe; border-color: #3b82f6;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">⚡</div>
+                            <strong>Botpress</strong><br>
+                            <span style="font-size: 10px;">Open source</span>
+                        </div>
+                    </div>
+                    <div class="highlight">
+                        <strong>👉 We'll use Tidio</strong> for this tutorial (easiest for beginners)
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">2</span> Sign Up & Install Widget</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Go to tidio.com
+2. Click "Start Free Trial"
+3. Sign up with email
+4. Choose "I have a website"
+5. Enter your website URL
+6. Copy the widget code
+7. Paste before </body> tag
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>💻 The code looks like this:</strong></p>
+                    <div class="code-block">
+&lt;script src="//code.tidio.co/abc123.js"&gt;
+&lt;/script&gt;
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;">No website? Use their test page to practice!</p>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">3</span> Create Your First Bot Flow</h3>
+                    <p><strong>Build a simple welcome bot:</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Dashboard → "Chatbots"
+2. Click "Create Chatbot"
+3. Choose "Welcome Message"
+4. Customize the greeting:
+   
+   "Hi! 👋 I'm here to help you
+    get started. What brings you
+    here today?"
+   
+5. Add quick reply buttons:
+   • "I'm new here"
+   • "I have a question"
+   • "Talk to support"
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">4</span> Add Smart Responses</h3>
+                    <p><strong>Teach your bot to answer questions:</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click "Add Trigger"
+2. Choose "Visitor Message Contains"
+3. Add keywords:
+   
+   IF message contains:
+   "pricing" OR "cost" OR "price"
+   
+   THEN send:
+   "Our plans start at $X/month.
+    Check out [link] for details!"
+   
+4. Repeat for common questions:
+   • How to sign up
+   • Features
+   • Support
+   • Getting started
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">5</span> Enable AI Mode (Optional)</h3>
+                    <p><strong>Let AI handle complex questions:</strong></p>
+                    <ul>
+                        <li>Go to Settings → AI Assistant</li>
+                        <li>Turn on "Lyro AI" (Tidio's AI)</li>
+                        <li>Feed it your FAQ/docs</li>
+                        <li>Set fallback to human support</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>💡 Pro tip:</strong> Start simple, add AI later when you see what users ask most
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">6</span> Customize Appearance</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Go to "Appearance"
+2. Change chat bubble color
+   to match your brand
+3. Upload your logo
+4. Set online/offline message
+5. Customize widget position
+   (bottom right is standard)
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">7</span> Add Onboarding Flow</h3>
+                    <p><strong>Guide new users automatically:</strong></p>
+                    <div class="code-block">
+TRIGGER: First visit to dashboard
+↓
+BOT: "Welcome! Let me show you
+      around. First, let's set up
+      your profile."
+      
+[Button: Start Tour]
+↓
+BOT: "Great! Now connect your
+      first integration..."
+↓
+BOT: "Perfect! You're all set.
+      Need help? I'm always here!"
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">8</span> Test & Improve</h3>
+                    <p><strong>Optimization checklist:</strong></p>
+                    <ul>
+                        <li>✅ Test all button clicks</li>
+                        <li>✅ Try typing random questions</li>
+                        <li>✅ Check mobile appearance</li>
+                        <li>✅ Review chat transcripts weekly</li>
+                        <li>✅ Add FAQs based on real questions</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>📊 Track metrics:</strong> Response time, resolution rate, user satisfaction
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">9</span> Connect to Your Tools</h3>
+                    <p><strong>Integrate with your stack:</strong></p>
+                    <ul>
+                        <li>Send chat data to Google Sheets</li>
+                        <li>Create tickets in your CRM</li>
+                        <li>Notify team in Slack</li>
+                        <li>Track events in analytics</li>
+                    </ul>
+                    <div class="code-block">
+Use Zapier to connect:
+Tidio → Google Sheets
+Tidio → Slack
+Tidio → Email
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">10</span> Go Live! 🎉</h3>
+                    <div style="padding: 15px; background: #f0fdf4; border-radius: 8px;">
+                        <p style="font-size: 12px; font-weight: 600; color: #059669; margin-bottom: 8px;">🚀 Your chatbot is ready!</p>
+                        <p style="font-size: 11px; margin-bottom: 8px;">What to do next:</p>
+                        <ul style="font-size: 11px;">
+                            <li>Monitor first 50 conversations</li>
+                            <li>Add missing FAQs</li>
+                            <li>Improve responses based on feedback</li>
+                            <li>Gradually enable more AI features</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="btn" style="background: #8b5cf6;" onclick="alert('🤖 Awesome! Your chatbot is live. Check the Email Templates next for ready-to-use content!')">🎊 My Chatbot is Live!</button>
+            </div>
+
+            <!-- Email Templates Section -->
+            <div id="email-templates" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">📧</span> Email Sequence Templates</h3>
+                    <p style="color: white;">5 ready-to-use email templates - just copy, customize, and send!</p>
+                </div>
+
+                <div class="card">
+                    <h3>📬 Template 1: Welcome Email (Day 0)</h3>
+                    <p style="font-size: 11px; color: #718096; margin-bottom: 10px;">Send immediately after signup</p>
+                    <div class="code-block" style="background: white; color: #2d3748; border: 2px solid #ec4899;">
+<strong>Subject:</strong> Welcome to [Your SaaS]! Let's get started 🎉
+
+Hi [First Name],
+
+Welcome aboard! We're thrilled to have you.
+
+You've just joined [X,XXX] companies using 
+[Your SaaS] to [main benefit].
+
+<strong>Here's what to do next:</strong>
+
+1️⃣ Complete your profile [link]
+2️⃣ Try your first [key feature]
+3️⃣ Invite your team
+
+<strong>Need help?</strong> 
+→ Watch 2-min quick start: [link]
+→ Browse help docs: [link]
+→ Reply to this email anytime
+
+Let's make magic happen! ✨
+
+[Your Name]
+[Your Title]
+[Company Name]
+
+P.S. Check your inbox tomorrow for 
+     pro tips from our team!
+                    </div>
+                    <div class="highlight">
+                        <strong>✏️ Customize:</strong> Replace [brackets], add your brand voice, include GIF/image
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎓 Template 2: Educational Email (Day 1)</h3>
+                    <p style="font-size: 11px; color: #718096; margin-bottom: 10px;">Teach them key features</p>
+                    <div class="code-block" style="background: white; color: #2d3748; border: 2px solid #ec4899;">
+<strong>Subject:</strong> 3 quick tips to master [Your SaaS] 💡
+
+Hey [First Name]!
+
+Hope you're enjoying [Your SaaS] so far!
+
+I wanted to share 3 quick tips that 
+our best users swear by:
+
+<strong>TIP #1: [Feature Name]</strong>
+[Brief explanation + benefit]
+→ Try it: [link]
+
+<strong>TIP #2: [Feature Name]</strong>
+[Brief explanation + benefit]
+→ Try it: [link]
+
+<strong>TIP #3: [Pro Secret]</strong>
+[Brief explanation + benefit]
+→ Try it: [link]
+
+<strong>📹 Watch this 3-min tutorial:</strong> [link]
+
+Questions? Just hit reply!
+
+Cheers,
+[Your Name]
+
+P.S. Tomorrow I'll show you how 
+     [advanced feature works]!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💪 Template 3: Value Reinforcement (Day 3)</h3>
+                    <p style="font-size: 11px; color: #718096; margin-bottom: 10px;">Show them what's possible</p>
+                    <div class="code-block" style="background: white; color: #2d3748; border: 2px solid #ec4899;">
+<strong>Subject:</strong> See what [Company] achieved with [Your SaaS] 🚀
+
+Hi [First Name],
+
+Quick story for you...
+
+[Company Name], just like you, started 
+with [Your SaaS] 3 months ago.
+
+<strong>The results?</strong>
+✅ [Metric]: +150% improvement
+✅ [Metric]: Saved 20 hours/week
+✅ [Metric]: 3x faster [process]
+
+<strong>Here's how they did it:</strong>
+[2-3 sentence case study summary]
+
+<strong>👉 Read the full story:</strong> [link]
+
+Want similar results?
+Book a free 15-min call: [link]
+
+You've got this! 💪
+
+[Your Name]
+
+P.S. Which result excites you most?
+     Hit reply and let me know!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>✅ Template 4: Check-In Email (Day 7)</h3>
+                    <p style="font-size: 11px; color: #718096; margin-bottom: 10px;">Personal touch + offer help</p>
+                    <div class="code-block" style="background: white; color: #2d3748; border: 2px solid #ec4899;">
+<strong>Subject:</strong> How's it going, [First Name]? 🤔
+
+Hey [First Name],
+
+It's been a week since you joined!
+
+I wanted to personally check in:
+
+❓ Have you tried [key feature] yet?
+❓ Is everything making sense?
+❓ Stuck on anything?
+
+<strong>Most new users at this stage are:</strong>
+→ Setting up [Feature A]
+→ Exploring [Feature B]
+→ Inviting their team
+
+<strong>Where are you at?</strong>
+
+If you're stuck or have questions,
+just reply to this email. I read
+every response personally!
+
+<strong>🎁 BONUS:</strong>
+Here's a free template to help:
+[Link to template/resource]
+
+Keep crushing it! 🎯
+
+[Your Name]
+
+P.S. Next week I'll share advanced
+     tactics our power users love.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 Template 5: Feature Deep-Dive (Day 14)</h3>
+                    <p style="font-size: 11px; color: #718096; margin-bottom: 10px;">Advanced tips for engaged users</p>
+                    <div class="code-block" style="background: white; color: #2d3748; border: 2px solid #ec4899;">
+<strong>Subject:</strong> Power user secrets 🔥 [Advanced Feature]
+
+Hey [First Name]!
+
+Ready to level up? 
+
+You've mastered the basics. Now let's
+explore [Advanced Feature] that only
+10% of users discover on their own.
+
+<strong>What it does:</strong>
+[Brief explanation]
+
+<strong>Why it matters:</strong>
+[Key benefit]
+
+<strong>How to use it:</strong>
+
+Step 1: [Action]
+Step 2: [Action]  
+Step 3: [Action]
+
+<strong>📹 5-min video walkthrough:</strong> [link]
+
+<strong>🎓 Advanced guide:</strong> [link]
+
+<strong>Try it today and let me know how it goes!</strong>
+
+Want to chat about your specific
+use case? Book time with me: [link]
+
+To your success! 🚀
+
+[Your Name]
+
+P.S. Have a power user tip of your own?
+     Reply and share - I love learning
+     from our users!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>⏰ When to Send Each Email</h3>
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 10px;">Recommended Schedule:</p>
+                        <ul style="font-size: 11px;">
+                            <li><strong>Day 0:</strong> Welcome (immediately)</li>
+                            <li><strong>Day 1:</strong> Educational (24h later)</li>
+                            <li><strong>Day 3:</strong> Value proof (72h later)</li>
+                            <li><strong>Day 7:</strong> Check-in (1 week)</li>
+                            <li><strong>Day 14:</strong> Advanced tips (2 weeks)</li>
+                        </ul>
+                        <p style="font-size: 11px; margin-top: 10px;"><strong>💡 Pro tip:</strong> Send at 10am in user's timezone for best open rates!</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>✏️ Customization Checklist</h3>
+                    <p>Before sending, make sure to:</p>
+                    <ul style="font-size: 11px;">
+                        <li>☑️ Replace ALL [brackets] with your info</li>
+                        <li>☑️ Add your brand voice/personality</li>
+                        <li>☑️ Include working links</li>
+                        <li>☑️ Add relevant images/GIFs</li>
+                        <li>☑️ Test email on mobile</li>
+                        <li>☑️ Check spam score</li>
+                        <li>☑️ Set up tracking pixels</li>
+                    </ul>
+                </div>
+
+                <button class="btn" style="background: #ec4899;" onclick="alert('📧 Great! Copy these templates into your email tool. Check the Zapier tutorial to automate sending!')">📋 I Copied the Templates!</button>
+            </div>
+
+            <!-- Zapier Tutorial Section -->
+            <div id="zapier-tutorial" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">⚡</span> Connect Your First Tool with Zapier</h3>
+                    <p style="color: white;">Learn to connect any two apps in 10 minutes - no coding needed!</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 What You'll Learn</h3>
+                    <p>By the end of this tutorial, you'll connect:</p>
+                    <ul>
+                        <li><strong>From:</strong> Google Forms (signup form)</li>
+                        <li><strong>To:</strong> Gmail (welcome email)</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>💡 Once you learn this,</strong> you can connect ANY 6000+ apps the same way!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">1</span> Create Your Zapier Account</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Go to zapier.com
+2. Click "Sign up free"
+3. Use Google to sign in (easiest)
+4. Verify your email
+5. Skip the wizard (we'll do it manually)
+                    </div>
+                    <div style="margin-top: 10px; padding: 10px; background: #dbeafe; border-radius: 8px;">
+                        <p style="font-size: 11px;"><strong>Free Plan Includes:</strong></p>
+                        <ul style="font-size: 11px;">
+                            <li>✅ 100 tasks/month (tasks = actions)</li>
+                            <li>✅ 5 Zaps (automations)</li>
+                            <li>✅ 15-minute update time</li>
+                            <li>✅ Enough for most beginners!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">2</span> Create a Simple Signup Form</h3>
+                    <p><strong>We need a form to trigger our automation:</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Go to forms.google.com
+2. Click "+ Blank form"
+3. Title: "SaaS Signup"
+4. Add questions:
+   • Name (short answer)
+   • Email (short answer)
+   • Company (short answer)
+5. Click "Send" → Copy link
+6. Keep tab open!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">3</span> Start Your First Zap</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. In Zapier, click "Create Zap"
+2. Click on "Trigger"
+3. Search: "Google Forms"
+4. Click "Google Forms"
+5. Choose event: "New Response in 
+   Spreadsheet"
+6. Click "Continue"
+                    </div>
+                    <div class="highlight">
+                        <strong>🤔 What's a trigger?</strong> The event that STARTS your automation. In this case: someone submitting your form.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">4</span> Connect Google Forms</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click "Sign in to Google Forms"
+2. Choose your Google account
+3. Click "Allow" (give Zapier permission)
+4. Wait for connection confirmation
+5. Click "Continue"
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>⚠️ Stuck?</strong> Make sure pop-ups are enabled in your browser!</p>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">5</span> Select Your Form</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click the "Spreadsheet" dropdown
+2. Find your "SaaS Signup" form
+   (Should appear in list)
+3. Click on it
+4. Click "Continue"
+5. Click "Test trigger"
+                    </div>
+                    <div style="margin-top: 10px; padding: 10px; background: #fef3c7; border-radius: 8px;">
+                        <p style="font-size: 11px;"><strong>💡 No data found?</strong></p>
+                        <ul style="font-size: 11px;">
+                            <li>Fill out your form once first!</li>
+                            <li>Go to your form link</li>
+                            <li>Submit test data</li>
+                            <li>Come back and test again</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">6</span> Add Email Action</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click "+" under your trigger
+2. Search: "Gmail"
+3. Click "Gmail"
+4. Choose action: "Send Email"
+5. Click "Continue"
+6. Sign in to Gmail (same process)
+7. Click "Continue"
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">7</span> Set Up Your Email</h3>
+                    <p><strong>Now for the fun part - designing your email!</strong></p>
+                    <div class="code-block">
+FIELD BY FIELD:
+
+<strong>To:</strong>
+Click in field → Choose "Email" 
+from dropdown (from form response)
+
+<strong>From Name:</strong>
+Your SaaS Name
+
+<strong>Subject:</strong>
+Welcome to [Your SaaS]! 🎉
+
+<strong>Body Type:</strong>
+Choose "Plain" or "HTML"
+
+<strong>Body:</strong>
+Hi [Click + choose "Name"],
+
+Thanks for signing up! 
+We're excited to have you.
+
+[Add your welcome message]
+
+Best,
+[Your Name]
+                    </div>
+                    <div class="highlight">
+                        <strong>✨ Magic moment:</strong> The [Name] and [Email] will automatically fill from form data!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">8</span> Test Your Zap!</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Click "Test action"
+2. Zapier sends a real test email
+3. Check YOUR email inbox
+4. Did you receive it? ✅
+5. Does it look good? ✅
+6. Click "Continue"
+                    </div>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>🐛 Email didn't arrive?</strong></p>
+                    <ul style="font-size: 11px;">
+                        <li>Check spam folder</li>
+                        <li>Verify email field is correct</li>
+                        <li>Try testing again</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">9</span> Name & Turn On Your Zap</h3>
+                    <div class="code-block">
+STEP BY STEP:
+1. Top left: Click "My Zap"
+2. Rename to: "Welcome Email Automation"
+3. Top right: Toggle ON
+4. Confirm "Turn on Zap"
+                    </div>
+                    <div style="margin-top: 10px; padding: 15px; background: #ecfdf5; border-radius: 8px;">
+                        <p style="font-size: 12px; font-weight: 600; color: #059669;">🎉 Congratulations! Your Zap is LIVE!</p>
+                        <p style="font-size: 11px; margin-top: 5px;">Every new form submission will now automatically trigger a welcome email!</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">10</span> Test It Live!</h3>
+                    <p><strong>The moment of truth:</strong></p>
+                    <div class="code-block">
+STEP BY STEP:
+1. Go to your Google Form link
+2. Fill it out with a different email
+3. Submit the form
+4. Wait 1-2 minutes
+5. Check that email's inbox
+6. 🎊 Welcome email should arrive!
+                    </div>
+                    <div class="highlight">
+                        <strong>⏱️ Timing:</strong> Free plan has ~15min delay. Paid plans are instant. For testing, you might wait a bit!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔍 Monitoring & Troubleshooting</h3>
+                    <p><strong>Keep an eye on your Zap:</strong></p>
+                    <ul style="font-size: 11px;">
+                        <li><strong>Dashboard:</strong> Shows all your Zaps status</li>
+                        <li><strong>Task History:</strong> See every automation run</li>
+                        <li><strong>Errors:</strong> Red = something broke, click for details</li>
+                        <li><strong>Success:</strong> Green = working perfectly!</li>
+                    </ul>
+                    <div class="code-block">
+Common issues:
+❌ Wrong field selected
+❌ Missing permissions
+❌ Formatting errors
+❌ Account disconnected
+
+Fix: Click error → Read message → 
+     Edit Zap → Retest → Turn back on
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🚀 Next Level: Multi-Step Zaps</h3>
+                    <p><strong>Now that you know the basics, add more actions:</strong></p>
+                    <div class="code-block">
+Example: Form → Email → Sheet → Slack
+
+1. Form submission (trigger)
+2. Send welcome email (action 1)
+3. Add to Google Sheet (action 2)
+4. Notify team in Slack (action 3)
+
+Just keep clicking "+" and adding
+more actions the same way!
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💡 Popular Zap Ideas to Try Next</h3>
+                    <ul style="font-size: 11px;">
+                        <li>Typeform → Email → Airtable</li>
+                        <li>Stripe payment → Thank you email</li>
+                        <li>Gmail label → Task in Trello</li>
+                        <li>Slack message → Create Google Doc</li>
+                        <li>New calendar event → Send SMS reminder</li>
+                    </ul>
+                    <p style="margin-top: 10px; font-size: 11px;"><strong>👉 Explore:</strong> Browse 1000+ pre-built Zap templates at zapier.com/apps</p>
+                </div>
+
+                <button class="btn" style="background: #3b82f6;" onclick="alert('⚡ Amazing! You just automated your first workflow. Now you can connect ANY tools the same way!')">🏆 I Connected My First Tools!</button>
+            </div>
+
+            <!-- Onboarding Checklist Generator Section -->
+            <div id="checklist-generator" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">✅</span> Onboarding Checklist Generator</h3>
+                    <p style="color: white;">Create a personalized onboarding checklist for YOUR SaaS in 2 minutes!</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 Step 1: Choose Your SaaS Type</h3>
+                    <p style="font-size: 11px; margin-bottom: 10px;">What kind of product do you offer?</p>
+                    <div style="display: grid; gap: 8px;">
+                        <label style="display: block; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                            <input type="radio" name="saas-type" value="productivity" style="margin-right: 8px;" onchange="generateChecklist()">
+                            <strong>📊 Productivity Tool</strong>
+                            <p style="font-size: 10px; color: #718096; margin: 5px 0 0 24px;">Project management, notes, to-do lists</p>
+                        </label>
+                        <label style="display: block; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="saas-type" value="marketing" style="margin-right: 8px;" onchange="generateChecklist()">
+                            <strong>📢 Marketing Platform</strong>
+                            <p style="font-size: 10px; color: #718096; margin: 5px 0 0 24px;">Email, social media, analytics</p>
+                        </label>
+                        <label style="display: block; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="saas-type" value="dev-tools" style="margin-right: 8px;" onchange="generateChecklist()">
+                            <strong>💻 Developer Tools</strong>
+                            <p style="font-size: 10px; color: #718096; margin: 5px 0 0 24px;">APIs, CI/CD, hosting, monitoring</p>
+                        </label>
+                        <label style="display: block; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="saas-type" value="crm" style="margin-right: 8px;" onchange="generateChecklist()">
+                            <strong>👥 CRM / Sales Tool</strong>
+                            <p style="font-size: 10px; color: #718096; margin: 5px 0 0 24px;">Customer management, pipeline, automation</p>
+                        </label>
+                        <label style="display: block; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="saas-type" value="ecommerce" style="margin-right: 8px;" onchange="generateChecklist()">
+                            <strong>🛒 E-commerce Platform</strong>
+                            <p style="font-size: 10px; color: #718096; margin: 5px 0 0 24px;">Online store, payments, inventory</p>
+                        </label>
+                        <label style="display: block; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
+                            <input type="radio" name="saas-type" value="other" style="margin-right: 8px;" onchange="generateChecklist()">
+                            <strong>🌟 Other / General SaaS</strong>
+                            <p style="font-size: 10px; color: #718096; margin: 5px 0 0 24px;">Get a universal checklist</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="generated-checklist" style="display: none;">
+                    <div class="card" style="background: #ecfdf5; border-left-color: #14b8a6;">
+                        <h3><span class="icon">📋</span> Your Custom Onboarding Checklist</h3>
+                        <p style="font-size: 11px; margin-bottom: 10px;">Generated for: <strong id="checklist-type"></strong></p>
+                        <div id="checklist-content"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>💾 Download Your Checklist</h3>
+                        <button class="btn" style="background: #14b8a6; margin-top: 5px;" onclick="downloadChecklist()">📥 Download as Text File</button>
+                        <button class="btn" style="background: #0891b2; margin-top: 5px;" onclick="copyChecklist()">📋 Copy to Clipboard</button>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>💡 Pro Tip:</strong> Print this checklist and check off items as you complete them. Celebrate small wins!
+                </div>
+            </div>
+
+            <!-- Glossary & FAQ Section -->
+            <div id="glossary" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">📚</span> Glossary & FAQ</h3>
+                    <p style="color: white;">Simple explanations of automation terms - no jargon!</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔤 Key Terms Explained</h3>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">🤖 API (Application Programming Interface)</p>
+                        <p style="font-size: 11px;">Think of it as a waiter in a restaurant. You (the app) tell the waiter (API) what you want, and they bring it from the kitchen (another app). It's how apps talk to each other.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Example: Zapier uses APIs to connect 
+Gmail with Google Sheets
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">⚡ Webhook</p>
+                        <p style="font-size: 11px;">An automatic notification. When something happens in App A, it instantly pings App B. Like a doorbell for apps!</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Example: User signs up → Webhook 
+instantly tells your CRM
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">🔄 Workflow Automation</p>
+                        <p style="font-size: 11px;">A series of actions that happen automatically when triggered. Like dominoes - push one, they all fall in order.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Example: Signup → Email → Sheet → 
+Slack notification (all automatic!)
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">🎯 Trigger</p>
+                        <p style="font-size: 11px;">The event that STARTS your automation. The "if this happens" part.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Examples: New email received, form 
+submitted, payment made, button clicked
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">⚙️ Action</p>
+                        <p style="font-size: 11px;">What happens AFTER the trigger. The "then do this" part.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Examples: Send email, create row, 
+post to Slack, update database
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">🤖 LLM (Large Language Model)</p>
+                        <p style="font-size: 11px;">AI that understands and generates human-like text. Powers chatbots and smart assistants.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Examples: GPT-4, Claude, Gemini
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">📊 CRM (Customer Relationship Management)</p>
+                        <p style="font-size: 11px;">Software to manage all your customer interactions, contacts, and sales in one place.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Examples: HubSpot, Salesforce, Pipedrive
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">💰 TTFV (Time to First Value)</p>
+                        <p style="font-size: 11px;">How long until a new user gets their first "win" or sees value in your product.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Goal: Under 5 minutes for 2026 SaaS
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">🎯 Activation Rate</p>
+                        <p style="font-size: 11px;">Percentage of signups who complete key onboarding steps and become active users.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Good benchmark: 60-75%+ activation rate
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p style="font-weight: 600; color: #667eea; margin-bottom: 5px;">📧 Drip Campaign</p>
+                        <p style="font-size: 11px;">A series of automated emails sent on a schedule. Like a drip of water - steady and consistent.</p>
+                        <div class="code-block" style="margin-top: 5px;">
+Example: Day 0 welcome → Day 1 tips → 
+Day 3 case study → Day 7 check-in
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>❓ Frequently Asked Questions</h3>
+                    
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: Do I need to know how to code?</p>
+                        <p style="font-size: 11px;">A: <strong>Nope!</strong> Tools like Zapier, Tidio, and most modern platforms are no-code. You can build powerful automations with just clicks.</p>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: How much does automation cost?</p>
+                        <p style="font-size: 11px;">A: You can start <strong>100% FREE</strong> with Zapier (100 tasks/month), free email tools, and open-source solutions. Paid plans start around $20-30/month.</p>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: What's the easiest automation to start with?</p>
+                        <p style="font-size: 11px;">A: <strong>Welcome email automation.</strong> Sign up form → automatic email. Takes 15 minutes, immediate value, hard to mess up!</p>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: Will automation replace human support?</p>
+                        <p style="font-size: 11px;">A: <strong>Not replace - enhance!</strong> Automation handles repetitive tasks (FAQs, welcome messages) so humans can focus on complex issues and building relationships.</p>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: What if my automation breaks?</p>
+                        <p style="font-size: 11px;">A: Most platforms send you alerts. Check task history, read error messages, and fix the issue. Usually it's simple (wrong field, expired permission).</p>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: How do I know if my automation is working?</p>
+                        <p style="font-size: 11px;">A: <strong>Always test first!</strong> Use your own email, check task histories, monitor for the first week. Most platforms have dashboards showing success/failure.</p>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: Can I automate everything?</p>
+                        <p style="font-size: 11px;">A: <strong>Not everything should be automated.</strong> Keep human touch for: complex problems, complaints, high-value customers, emotional situations.</p>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; color: #2d3748; margin-bottom: 5px;">Q: What's the ROI of onboarding automation?</p>
+                        <p style="font-size: 11px;">A: Most companies see <strong>60-80% time savings</strong>, 2-3x activation rates, and 40-50% reduction in support tickets within 3 months.</p>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>💬 Still have questions?</strong> Most automation communities on Reddit, Discord, and forums are super helpful and beginner-friendly!
+                </div>
+            </div>
+
+            <!-- Cost Calculator Section -->
+            <div id="cost-calculator" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">💰</span> Automation Cost Calculator</h3>
+                    <p style="color: white;">Estimate your monthly automation costs and ROI</p>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Your Usage</h3>
+                    <p style="font-size: 11px; margin-bottom: 10px;">Tell us about your SaaS:</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 5px;">Monthly Signups:</label>
+                        <input type="number" id="monthly-signups" value="100" min="1" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;" oninput="calculateCosts()">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 5px;">Emails per user per month:</label>
+                        <input type="number" id="emails-per-user" value="5" min="1" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;" oninput="calculateCosts()">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 11px; font-weight: 600; display: block; margin-bottom: 5px;">Chatbot conversations per month:</label>
+                        <input type="number" id="chatbot-convos" value="200" min="0" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;" oninput="calculateCosts()">
+                    </div>
+
+                    <button class="btn" style="background: #f59e0b;" onclick="calculateCosts()">🧮 Calculate Costs</button>
+                </div>
+
+                <div id="cost-results" style="display: none;">
+                    <div class="metric-box" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <h4>💸 Estimated Monthly Cost</h4>
+                        <div class="value" id="total-cost">$0</div>
+                        <p style="font-size: 11px; margin-top: 5px;">Total automation expenses</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Cost Breakdown</h3>
+                        <div id="cost-breakdown"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>💡 Free vs Paid Comparison</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div style="background: #ecfdf5; padding: 12px; border-radius: 8px; border: 2px solid #10b981;">
+                                <p style="font-weight: 600; font-size: 12px; color: #059669; margin-bottom: 8px;">🆓 FREE Tier</p>
+                                <ul style="font-size: 10px; margin-left: 15px;">
+                                    <li>Zapier: 100 tasks</li>
+                                    <li>Gmail: Unlimited</li>
+                                    <li>Tidio: 50 convos</li>
+                                    <li>Forms: Unlimited</li>
+                                </ul>
+                                <p style="font-size: 11px; font-weight: 600; margin-top: 8px;">Total: $0/mo</p>
+                            </div>
+                            <div style="background: #fef3c7; padding: 12px; border-radius: 8px; border: 2px solid #f59e0b;">
+                                <p style="font-weight: 600; font-size: 12px; color: #d97706; margin-bottom: 8px;">💎 PAID Tier</p>
+                                <ul style="font-size: 10px; margin-left: 15px;">
+                                    <li>Zapier Pro: $20</li>
+                                    <li>Email tool: $15</li>
+                                    <li>Chatbot AI: $25</li>
+                                    <li>Analytics: $10</li>
+                                </ul>
+                                <p style="font-size: 11px; font-weight: 600; margin-top: 8px;">Total: ~$70/mo</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📈 ROI Calculation</h3>
+                        <div id="roi-breakdown"></div>
+                        <div class="metric-box" style="margin-top: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <h4>🎯 Estimated Monthly Savings</h4>
+                            <div class="value" id="monthly-savings">$0</div>
+                            <p style="font-size: 11px; margin-top: 5px;">Time saved converted to cost</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>💰 Bottom Line:</strong> Most SaaS companies break even on automation costs within the first month due to time savings and improved conversion rates!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Tutorials Section -->
+            <div id="video-tutorials" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">🎥</span> Video Tutorials Hub</h3>
+                    <p style="color: white;">Watch step-by-step video guides for visual learners</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎬 Getting Started Videos</h3>
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 Zapier Basics (8 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Learn to create your first Zap from scratch</p>
+                        <a href="https://zapier.com/learn" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Watch on Zapier →</a>
+                    </div>
+
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 Email Automation 101 (12 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Build a complete welcome email sequence</p>
+                        <a href="https://youtube.com/results?search_query=email+automation+tutorial" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Search on YouTube →</a>
+                    </div>
+
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 AI Chatbot Setup (15 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Install and configure your first chatbot</p>
+                        <a href="https://youtube.com/results?search_query=tidio+chatbot+tutorial" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Search on YouTube →</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🚀 Advanced Tutorials</h3>
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 Multi-Step Workflows (20 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Connect 5+ apps in one automation flow</p>
+                        <a href="https://youtube.com/results?search_query=zapier+multi+step+zap" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Search on YouTube →</a>
+                    </div>
+
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 Claude API Integration (25 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Add AI-powered responses to your app</p>
+                        <a href="https://docs.anthropic.com" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">View Docs →</a>
+                    </div>
+
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 Analytics & Tracking (18 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Measure your automation performance</p>
+                        <a href="https://youtube.com/results?search_query=saas+analytics+tutorial" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Search on YouTube →</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💡 Pro Tips & Tricks</h3>
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 10 Time-Saving Hacks (10 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Expert shortcuts for faster automation</p>
+                        <a href="https://youtube.com/results?search_query=zapier+tips+and+tricks" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Search on YouTube →</a>
+                    </div>
+
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 Common Mistakes to Avoid (12 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">Learn from others' errors</p>
+                        <a href="https://youtube.com/results?search_query=automation+mistakes" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Search on YouTube →</a>
+                    </div>
+
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; font-weight: 600; margin-bottom: 5px;">🎥 Scaling Your Automations (22 min)</p>
+                        <p style="font-size: 10px; color: #718096; margin-bottom: 8px;">From 100 to 10,000 users</p>
+                        <a href="https://youtube.com/results?search_query=scale+saas+automation" target="_blank" style="font-size: 11px; color: #ef4444; text-decoration: underline;">Search on YouTube →</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎓 Recommended Channels</h3>
+                    <ul style="font-size: 11px;">
+                        <li><strong>Zapier YouTube:</strong> Official tutorials and use cases</li>
+                        <li><strong>SaaS Academy:</strong> Onboarding strategies</li>
+                        <li><strong>Marketing Examples:</strong> Real-world automation teardowns</li>
+                        <li><strong>API University:</strong> Technical integrations</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <strong>📺 Learning Tip:</strong> Watch at 1.5x speed to learn faster! Take notes and pause to try things yourself.
+                </div>
+
+                <button class="btn" style="background: #ef4444;" onclick="alert('🎥 Great! Bookmark this page and return to watch tutorials as you progress through your automation journey.')">📌 Bookmarked Video Hub</button>
+            </div>
+
+            <!-- Templates & Resources Section -->
+            <div id="resources" class="section">
+                <div class="card" style="background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); color: white; border: none;">
+                    <h3 style="color: white;"><span class="icon">📦</span> Templates & Resources</h3>
+                    <p style="color: white;">Downloadable templates, checklists, and tools to speed up your automation</p>
+                </div>
+
+                <div class="card">
+                    <h3>📄 Downloadable Templates</h3>
+                    
+                    <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #06b6d4;">
+                        <p style="font-size: 12px; font-weight: 600; margin-bottom: 5px;">📧 Email Sequence Templates (5 emails)</p>
+                        <p style="font-size: 10px; color: #475569; margin-bottom: 8px;">Welcome, educational, value proof, check-in, and advanced tips</p>
+                        <button class="btn" style="background: #06b6d4; padding: 8px 15px; font-size: 11px; margin-top: 5px;" onclick="downloadTemplate('email')">📥 Download (.txt)</button>
+                    </div>
+
+                    <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #06b6d4;">
+                        <p style="font-size: 12px; font-weight: 600; margin-bottom: 5px;">✅ Onboarding Checklist Template</p>
+                        <p style="font-size: 10px; color: #475569; margin-bottom: 8px;">Customizable checklist for any SaaS type</p>
+                        <button class="btn" style="background: #06b6d4; padding: 8px 15px; font-size: 11px; margin-top: 5px;" onclick="downloadTemplate('checklist')">📥 Download (.txt)</button>
+                    </div>
+
+                    <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #06b6d4;">
+                        <p style="font-size: 12px; font-weight: 600; margin-bottom: 5px;">🤖 Chatbot Response Scripts</p>
+                        <p style="font-size: 10px; color: #475569; margin-bottom: 8px;">Pre-written responses for common questions</p>
+                        <button class="btn" style="background: #06b6d4; padding: 8px 15px; font-size: 11px; margin-top: 5px;" onclick="downloadTemplate('chatbot')">📥 Download (.txt)</button>
+                    </div>
+
+                    <div style="background: #f0f9ff; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #06b6d4;">
+                        <p style="font-size: 12px; font-weight: 600; margin-bottom: 5px;">📊 Metrics Tracking Spreadsheet</p>
+                        <p style="font-size: 10px; color: #475569; margin-bottom: 8px;">Track activation, conversion, and retention rates</p>
+                        <button class="btn" style="background: #06b6d4; padding: 8px 15px; font-size: 11px; margin-top: 5px;" onclick="alert('Template: Copy this to Google Sheets and customize for your metrics!')">📥 Download (.csv)</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔗 Useful Resources</h3>
+                    
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; font-size: 11px; color: #0284c7;">📚 Zapier University</p>
+                        <p style="font-size: 10px; color: #64748b; margin: 5px 0;">Free courses on automation fundamentals</p>
+                        <a href="https://zapier.com/learn" target="_blank" style="font-size: 11px; color: #06b6d4;">Visit →</a>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; font-size: 11px; color: #0284c7;">🤖 Claude API Documentation</p>
+                        <p style="font-size: 10px; color: #64748b; margin: 5px 0;">Build AI-powered features into your app</p>
+                        <a href="https://docs.anthropic.com" target="_blank" style="font-size: 11px; color: #06b6d4;">Visit →</a>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; font-size: 11px; color: #0284c7;">📖 SaaS Onboarding Best Practices</p>
+                        <p style="font-size: 10px; color: #64748b; margin: 5px 0;">Research-backed strategies from UserOnboard</p>
+                        <a href="https://useronboard.com" target="_blank" style="font-size: 11px; color: #06b6d4;">Visit →</a>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; font-size: 11px; color: #0284c7;">💬 r/SaaS Community</p>
+                        <p style="font-size: 10px; color: #64748b; margin: 5px 0;">Reddit community for SaaS founders</p>
+                        <a href="https://reddit.com/r/SaaS" target="_blank" style="font-size: 11px; color: #06b6d4;">Visit →</a>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; font-size: 11px; color: #0284c7;">🎨 Email Template Gallery</p>
+                        <p style="font-size: 10px; color: #64748b; margin: 5px 0;">Really Good Emails - inspiration library</p>
+                        <a href="https://reallygoodemails.com" target="_blank" style="font-size: 11px; color: #06b6d4;">Visit →</a>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <p style="font-weight: 600; font-size: 11px; color: #0284c7;">⚡ Make (Integromat) Templates</p>
+                        <p style="font-size: 10px; color: #64748b; margin: 5px 0;">Pre-built automation scenarios</p>
+                        <a href="https://make.com/templates" target="_blank" style="font-size: 11px; color: #06b6d4;">Visit →</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🛠️ Free Tools</h3>
+                    <div class="tool-grid">
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            Google Forms<br>
+                            <span style="font-size: 9px;">Free signup forms</span>
+                        </div>
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            Tally.so<br>
+                            <span style="font-size: 9px;">Beautiful forms</span>
+                        </div>
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            Tawk.to<br>
+                            <span style="font-size: 9px;">Free live chat</span>
+                        </div>
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            Mailchimp<br>
+                            <span style="font-size: 9px;">Email marketing</span>
+                        </div>
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            Notion<br>
+                            <span style="font-size: 9px;">Documentation</span>
+                        </div>
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            Airtable<br>
+                            <span style="font-size: 9px;">Database/CRM</span>
+                        </div>
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            Canva<br>
+                            <span style="font-size: 9px;">Email graphics</span>
+                        </div>
+                        <div class="tool-item" style="background: #f0f9ff; border-color: #06b6d4;">
+                            n8n<br>
+                            <span style="font-size: 9px;">Open automation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📝 Copywriting Formulas</h3>
+                    <div style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-weight: 600; font-size: 11px; margin-bottom: 5px;">AIDA Formula</p>
+                        <p style="font-size: 10px;"><strong>A</strong>ttention → <strong>I</strong>nterest → <strong>D</strong>esire → <strong>A</strong>ction</p>
+                        <p style="font-size: 10px; margin-top: 5px;">Perfect for welcome emails and sales copy</p>
+                    </div>
+
+                    <div style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-weight: 600; font-size: 11px; margin-bottom: 5px;">PAS Formula</p>
+                        <p style="font-size: 10px;"><strong>P</strong>roblem → <strong>A</strong>gitate → <strong>S</strong>olve</p>
+                        <p style="font-size: 10px; margin-top: 5px;">Great for educational emails and case studies</p>
+                    </div>
+
+                    <div style="background: #fef3c7; padding: 12px; border-radius: 8px;">
+                        <p style="font-weight: 600; font-size: 11px; margin-bottom: 5px;">BAB Formula</p>
+                        <p style="font-size: 10px;"><strong>B</strong>efore → <strong>A</strong>fter → <strong>B</strong>ridge</p>
+                        <p style="font-size: 10px; margin-top: 5px;">Perfect for value reinforcement emails</p>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <strong>💡 Pro Tip:</strong> Bookmark this section! Come back whenever you need templates or resources. All downloads are free!
+                </div>
+            </div>
+
+            <!-- Setup Section -->
+            <div id="setup" class="section">
+                <div class="card">
+                    <h3><span class="step-number">1</span> Define Onboarding Goals</h3>
+                    <p>Identify key milestones for user activation:</p>
+                    <ul>
+                        <li>Account creation & verification</li>
+                        <li>Profile completion</li>
+                        <li>First core action (aha moment)</li>
+                        <li>Integration setup</li>
+                        <li>Team invitation</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">2</span> Map User Journey</h3>
+                    <p>Create a flowchart of your ideal user path:</p>
+                    <div class="code-block">
+Signup → Email Verify → Welcome
+→ Profile Setup → AI Recommendations
+→ First Action → Success Celebration
+→ Invite Team → Advanced Features
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">3</span> Identify Automation Opportunities</h3>
+                    <ul>
+                        <li><strong>Email sequences:</strong> Triggered welcome & educational emails</li>
+                        <li><strong>In-app guides:</strong> Contextual tooltips and walkthroughs</li>
+                        <li><strong>AI chatbots:</strong> 24/7 support and guidance</li>
+                        <li><strong>Data enrichment:</strong> Auto-fill user profiles</li>
+                        <li><strong>Smart routing:</strong> Direct users to relevant features</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="step-number">4</span> Choose Your Tech Stack</h3>
+                    <p>Essential components for 2026:</p>
+                    <ul>
+                        <li>🤖 LLM API (GPT-4, Claude, Gemini)</li>
+                        <li>📧 Email automation platform</li>
+                        <li>🔄 Workflow automation (Zapier, Make, n8n)</li>
+                        <li>📊 Analytics & tracking</li>
+                        <li>💬 AI chatbot framework</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- AI Tools Section -->
+            <div id="ai-tools" class="section">
+                <div class="card">
+                    <h3><span class="icon">🤖</span> Top AI Tools for 2026</h3>
+                    <div class="tool-grid">
+                        <div class="tool-item">Claude API<br>🧠</div>
+                        <div class="tool-item">GPT-4 Turbo<br>⚡</div>
+                        <div class="tool-item">Gemini Pro<br>🌟</div>
+                        <div class="tool-item">Perplexity<br>🔍</div>
+                        <div class="tool-item">Intercom AI<br>💬</div>
+                        <div class="tool-item">Drift AI<br>🎯</div>
+                        <div class="tool-item">Pendo AI<br>📱</div>
+                        <div class="tool-item">Appcues<br>👋</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">🔧</span> Integration Platforms</h3>
+                    <ul>
+                        <li><strong>Zapier AI:</strong> Connect 6000+ apps with AI-powered automation</li>
+                        <li><strong>Make (Integromat):</strong> Visual workflow builder with AI modules</li>
+                        <li><strong>n8n:</strong> Open-source automation with LLM integrations</li>
+                        <li><strong>Pipedream:</strong> Code-first automation for developers</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">💬</span> AI Chatbot Solutions</h3>
+                    <p>Build intelligent onboarding assistants:</p>
+                    <ul>
+                        <li><strong>Custom with Claude API:</strong> Most flexible, personalized responses</li>
+                        <li><strong>Intercom Fin:</strong> Pre-built for SaaS, easy setup</li>
+                        <li><strong>Drift Conversational AI:</strong> Sales-focused automation</li>
+                        <li><strong>Voiceflow:</strong> No-code AI agent builder</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <strong>🎯 Pro Tip:</strong> Use Claude API for complex reasoning and personalization, GPT-4 for quick responses, and Gemini for multimodal interactions.
+                </div>
+            </div>
+
+            <!-- Automation Section -->
+            <div id="automation" class="section">
+                <div class="card">
+                    <h3><span class="icon">⚙️</span> Automation Workflow Example</h3>
+                    <div class="code-block">
+// User signs up
+TRIGGER: New user created
+↓
+ACTION: Send to AI for analysis
+→ Analyze signup data
+→ Predict user intent
+→ Generate personalized plan
+↓
+ACTION: Send welcome email
+→ Personalized based on AI insights
+↓
+ACTION: Create in-app checklist
+→ Customized to user's industry
+↓
+ACTION: Schedule follow-ups
+→ AI-timed for optimal engagement
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">📧</span> Email Automation Sequence</h3>
+                    <p><strong>Day 0:</strong> Welcome + Setup guide (AI-personalized)</p>
+                    <p><strong>Day 1:</strong> Feature highlights based on user role</p>
+                    <p><strong>Day 3:</strong> Success stories from similar companies</p>
+                    <p><strong>Day 7:</strong> Check-in with AI-suggested next steps</p>
+                    <p><strong>Day 14:</strong> Advanced features & team collaboration</p>
+                    <p><strong>Day 30:</strong> Success milestone & upsell opportunities</p>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">🎯</span> AI-Powered Personalization</h3>
+                    <ul>
+                        <li><strong>Industry detection:</strong> AI analyzes domain/profile to customize content</li>
+                        <li><strong>Role-based flows:</strong> Different paths for developers, marketers, managers</li>
+                        <li><strong>Behavior prediction:</strong> Anticipate next steps before user asks</li>
+                        <li><strong>Dynamic content:</strong> Real-time email/UI adjustments</li>
+                        <li><strong>Sentiment analysis:</strong> Adjust tone based on user engagement</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">🔄</span> Sample Zapier/Make Workflow</h3>
+                    <div class="code-block">
+1. Webhook receives new signup
+2. AI (Claude) analyzes user data
+3. Enrich data with Clearbit
+4. Create CRM contact
+5. Send personalized email
+6. Add to onboarding Slack channel
+7. Create task for success team
+8. Track in analytics platform
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">💡</span> Chatbot Implementation</h3>
+                    <p>Create an AI assistant that guides users:</p>
+                    <ul>
+                        <li>Embed chatbot widget on dashboard</li>
+                        <li>Connect to Claude API for intelligent responses</li>
+                        <li>Feed knowledge base & documentation</li>
+                        <li>Enable proactive suggestions based on user behavior</li>
+                        <li>Escalate to human when needed</li>
+                    </ul>
+                    <div class="code-block">
+// Sample API call structure
+fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: {
+    'x-api-key': 'YOUR_KEY',
+    'content-type': 'application/json'
+  },
+  body: JSON.stringify({
+    model: 'claude-sonnet-4-5-20250929',
+    messages: [{
+      role: 'user',
+      content: `Help user ${userName} 
+                with ${userIntent}`
+    }]
+  })
+});
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Section -->
+            <div id="metrics" class="section">
+                <div class="card">
+                    <h3><span class="icon">📊</span> Key Metrics to Track</h3>
+                    <ul>
+                        <li><strong>Time to First Value (TTFV):</strong> How long until users complete core action</li>
+                        <li><strong>Activation Rate:</strong> % of users reaching key milestones</li>
+                        <li><strong>Onboarding Completion Rate:</strong> % completing full flow</li>
+                        <li><strong>Day 7/30 Retention:</strong> Users still active after 7/30 days</li>
+                        <li><strong>Support Ticket Reduction:</strong> Fewer questions = better automation</li>
+                    </ul>
+                </div>
+
+                <div class="metric-box">
+                    <h4>Target Benchmarks 2026</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; text-align: left;">
+                        <div>
+                            <div class="value" style="font-size: 18px;">< 5min</div>
+                            <div style="font-size: 11px;">Time to First Value</div>
+                        </div>
+                        <div>
+                            <div class="value" style="font-size: 18px;">75%+</div>
+                            <div style="font-size: 11px;">Activation Rate</div>
+                        </div>
+                        <div>
+                            <div class="value" style="font-size: 18px;">60%+</div>
+                            <div style="font-size: 11px;">Completion Rate</div>
+                        </div>
+                        <div>
+                            <div class="value" style="font-size: 18px;">80%+</div>
+                            <div style="font-size: 11px;">Day 7 Retention</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">🔍</span> A/B Testing Ideas</h3>
+                    <ul>
+                        <li>AI-personalized vs. generic welcome emails</li>
+                        <li>Chatbot-guided vs. self-service onboarding</li>
+                        <li>Progressive disclosure vs. full feature tour</li>
+                        <li>Video tutorials vs. interactive walkthroughs</li>
+                        <li>Gamification vs. traditional checklists</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><span class="icon">📈</span> Optimization Strategies</h3>
+                    <p>Continuously improve with AI insights:</p>
+                    <ul>
+                        <li>Analyze drop-off points with AI</li>
+                        <li>Use LLMs to summarize user feedback</li>
+                        <li>Predict churn risk and intervene automatically</li>
+                        <li>Personalize flows based on cohort analysis</li>
+                        <li>Auto-generate content variations for testing</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <strong>🎯 Success Formula:</strong> Monitor → Analyze with AI → Personalize → Automate → Measure → Repeat
+                </div>
+
+                <button class="btn" onclick="alert('Great! Start by defining your onboarding goals and mapping your user journey. Then choose your AI tools and build your first automation workflow.')">🚀 Start Your Automation Journey</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 AI Onboarding Automation Guide</p>
+            <p style="margin-top: 5px;">Built for modern SaaS companies</p>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top of content
+            document.querySelector('.content').scrollTop = 0;
+        }
+
+        // Checklist Generator Function
+        function generateChecklist() {
+            const selectedType = document.querySelector('input[name="saas-type"]:checked');
+            if (!selectedType) return;
+
+            const type = selectedType.value;
+            const checklists = {
+                'productivity': {
+                    name: 'Productivity Tool',
+                    items: [
+                        'Account creation & email verification',
+                        'Profile setup (name, avatar, timezone)',
+                        'Create first project/workspace',
+                        'Add first task/note/item',
+                        'Set up notifications preferences',
+                        'Explore keyboard shortcuts',
+                        'Invite team member (optional)',
+                        'Connect calendar integration',
+                        'Complete first core action',
+                        'Set up mobile app'
+                    ]
+                },
+                'marketing': {
+                    name: 'Marketing Platform',
+                    items: [
+                        'Account setup & business details',
+                        'Connect first marketing channel',
+                        'Import existing contacts/audience',
+                        'Create first campaign/post',
+                        'Set up tracking/analytics',
+                        'Design email template or post',
+                        'Schedule or send first campaign',
+                        'Review performance metrics',
+                        'Set up automation rules',
+                        'Invite team members'
+                    ]
+                },
+                'dev-tools': {
+                    name: 'Developer Tools',
+                    items: [
+                        'Create account & verify email',
+                        'Generate API keys',
+                        'Review documentation',
+                        'Make first API call',
+                        'Set up development environment',
+                        'Install SDK/libraries',
+                        'Run example project',
+                        'Configure webhooks',
+                        'Test error handling',
+                        'Deploy to production'
+                    ]
+                },
+                'crm': {
+                    name: 'CRM / Sales Tool',
+                    items: [
+                        'Account setup & company info',
+                        'Import existing contacts',
+                        'Create first contact manually',
+                        'Set up sales pipeline stages',
+                        'Add first deal/opportunity',
+                        'Configure email integration',
+                        'Set up activity tracking',
+                        'Create first task/reminder',
+                        'Invite sales team',
+                        'Customize dashboard'
+                    ]
+                },
+                'ecommerce': {
+                    name: 'E-commerce Platform',
+                    items: [
+                        'Store setup & business details',
+                        'Choose and customize theme',
+                        'Add first product',
+                        'Set up payment methods',
+                        'Configure shipping options',
+                        'Set up tax settings',
+                        'Create product categories',
+                        'Add high-quality product images',
+                        'Write product descriptions',
+                        'Launch store & test checkout'
+                    ]
+                },
+                'other': {
+                    name: 'General SaaS',
+                    items: [
+                        'Complete account signup',
+                        'Verify email address',
+                        'Complete profile information',
+                        'Take product tour',
+                        'Complete first key action',
+                        'Explore main features',
+                        'Set up preferences/settings',
+                        'Connect integrations (if applicable)',
+                        'Invite team members (if applicable)',
+                        'Review help documentation'
+                    ]
+                }
+            };
+
+            const checklist = checklists[type];
+            document.getElementById('checklist-type').textContent = checklist.name;
+            
+            let checklistHTML = '<ul style="font-size: 11px; margin-top: 10px;">';
+            checklist.items.forEach((item, index) => {
+                checklistHTML += `
+                    <li style="margin-bottom: 8px; padding: 8px; background: white; border-radius: 6px;">
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" style="width: 16px; height: 16px;">
+                            <span>${item}</span>
+                        </label>
+                    </li>
+                `;
+            });
+            checklistHTML += '</ul>';
+            
+            document.getElementById('checklist-content').innerHTML = checklistHTML;
+            document.getElementById('generated-checklist').style.display = 'block';
+        }
+
+        function downloadChecklist() {
+            const type = document.getElementById('checklist-type').textContent;
+            const checkboxes = document.querySelectorAll('#checklist-content input[type="checkbox"]');
+            let content = `ONBOARDING CHECKLIST: ${type}\n`;
+            content += `Generated: ${new Date().toLocaleDateString()}\n`;
+            content += `${'='.repeat(50)}\n\n`;
+            
+            checkboxes.forEach((cb, index) => {
+                const text = cb.parentElement.querySelector('span').textContent;
+                content += `☐ ${text}\n`;
+            });
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `onboarding-checklist-${type.toLowerCase().replace(/\s+/g, '-')}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Checklist downloaded! Check your downloads folder.');
+        }
+
+        function copyChecklist() {
+            const type = document.getElementById('checklist-type').textContent;
+            const checkboxes = document.querySelectorAll('#checklist-content input[type="checkbox"]');
+            let content = `ONBOARDING CHECKLIST: ${type}\n\n`;
+            
+            checkboxes.forEach((cb) => {
+                const text = cb.parentElement.querySelector('span').textContent;
+                content += `☐ ${text}\n`;
+            });
+            
+            navigator.clipboard.writeText(content).then(() => {
+                alert('📋 Checklist copied to clipboard!');
+            });
+        }
+
+        // Cost Calculator Function
+        function calculateCosts() {
+            const signups = parseInt(document.getElementById('monthly-signups').value) || 0;
+            const emailsPerUser = parseInt(document.getElementById('emails-per-user').value) || 0;
+            const chatbotConvos = parseInt(document.getElementById('chatbot-convos').value) || 0;
+
+            // Calculate costs
+            const totalEmails = signups * emailsPerUser;
+            const zapierTasks = signups * (emailsPerUser + 2); // emails + other actions
+            
+            let zapierCost = 0;
+            if (zapierTasks <= 100) zapierCost = 0;
+            else if (zapierTasks <= 750) zapierCost = 20;
+            else if (zapierTasks <= 2000) zapierCost = 50;
+            else zapierCost = 100;
+
+            let emailCost = 0;
+            if (totalEmails <= 1000) emailCost = 0;
+            else if (totalEmails <= 5000) emailCost = 15;
+            else emailCost = 30;
+
+            let chatbotCost = 0;
+            if (chatbotConvos <= 50) chatbotCost = 0;
+            else if (chatbotConvos <= 500) chatbotCost = 15;
+            else chatbotCost = 29;
+
+            const analyticsCost = signups > 100 ? 10 : 0;
+            const totalCost = zapierCost + emailCost + chatbotCost + analyticsCost;
+
+            // Calculate ROI
+            const timePerSignup = 15; // minutes saved per signup
+            const totalTimeSaved = (signups * timePerSignup) / 60; // hours
+            const hourlyRate = 50; // average hourly rate
+            const monthlySavings = totalTimeSaved * hourlyRate;
+
+            // Display results
+            document.getElementById('total-cost').textContent = `$${totalCost}`;
+            
+            let breakdownHTML = `
+                <div style="font-size: 11px;">
+                    <div style="display: flex; justify-content: space-between; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 5px;">
+                        <span>Zapier (${zapierTasks} tasks/mo)</span>
+                        <strong>$${zapierCost}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 5px;">
+                        <span>Email service (${totalEmails} emails/mo)</span>
+                        <strong>$${emailCost}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 5px;">
+                        <span>AI Chatbot (${chatbotConvos} convos/mo)</span>
+                        <strong>$${chatbotCost}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px; background: #f8f9fa; border-radius: 6px; margin-bottom: 5px;">
+                        <span>Analytics</span>
+                        <strong>$${analyticsCost}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 12px; background: #667eea; color: white; border-radius: 6px; margin-top: 10px; font-weight: 600;">
+                        <span>TOTAL</span>
+                        <strong>$${totalCost}/mo</strong>
+                    </div>
+                </div>
+            `;
+            document.getElementById('cost-breakdown').innerHTML = breakdownHTML;
+
+            let roiHTML = `
+                <div style="font-size: 11px;">
+                    <p style="margin-bottom: 10px;"><strong>Time Savings Analysis:</strong></p>
+                    <div style="background: #f0fdf4; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                        <p>⏱️ <strong>${totalTimeSaved.toFixed(1)} hours saved</strong> per month</p>
+                        <p style="font-size: 10px; color: #059669; margin-top: 5px;">(${timePerSignup} min per signup × ${signups} signups)</p>
+                    </div>
+                    <div style="background: #fef3c7; padding: 10px; border-radius: 8px;">
+                        <p>💵 At $${hourlyRate}/hour = <strong>$${monthlySavings.toFixed(2)}</strong> value</p>
+                        <p style="font-size: 10px; color: #d97706; margin-top: 5px;">Net savings: $${(monthlySavings - totalCost).toFixed(2)}/month</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('roi-breakdown').innerHTML = roiHTML;
+            document.getElementById('monthly-savings').textContent = `$${monthlySavings.toFixed(0)}`;
+
+            document.getElementById('cost-results').style.display = 'block';
+        }
+
+        // Template Download Functions
+        function downloadTemplate(type) {
+            let content = '';
+            let filename = '';
+
+            if (type === 'email') {
+                content = `EMAIL SEQUENCE TEMPLATES
+${'='.repeat(50)}
+
+EMAIL 1: WELCOME (Day 0)
+Subject: Welcome to [Your SaaS]! Let's get started 🎉
+
+Hi [First Name],
+
+Welcome aboard! We're thrilled to have you.
+
+You've just joined [X,XXX] companies using [Your SaaS] to [main benefit].
+
+Here's what to do next:
+1️⃣ Complete your profile [link]
+2️⃣ Try your first [key feature]
+3️⃣ Invite your team
+
+Need help? Reply to this email anytime.
+
+Best,
+[Your Name]
+
+${'='.repeat(50)}
+
+EMAIL 2: EDUCATIONAL (Day 1)
+Subject: 3 quick tips to master [Your SaaS] 💡
+
+Hey [First Name]!
+
+Here are 3 tips our best users swear by:
+
+TIP #1: [Feature] - [Brief explanation]
+TIP #2: [Feature] - [Brief explanation]
+TIP #3: [Secret] - [Brief explanation]
+
+Watch this 3-min tutorial: [link]
+
+Questions? Just hit reply!
+
+${'='.repeat(50)}
+
+EMAIL 3: VALUE PROOF (Day 3)
+Subject: See what [Company] achieved 🚀
+
+Hi [First Name],
+
+Quick success story...
+[Company] achieved [results] using [Your SaaS]
+
+✅ [Metric]: +150% improvement
+✅ [Metric]: Saved 20 hours/week
+
+Read the full story: [link]
+
+${'='.repeat(50)}
+
+EMAIL 4: CHECK-IN (Day 7)
+Subject: How's it going? 🤔
+
+Hey [First Name],
+
+Just checking in - have you tried [feature] yet?
+Any questions? Reply and let me know!
+
+Bonus resource: [link]
+
+${'='.repeat(50)}
+
+EMAIL 5: ADVANCED (Day 14)
+Subject: Power user secrets 🔥
+
+Ready to level up?
+
+Here's an advanced feature only 10% discover:
+[Feature explanation and tutorial link]
+
+Try it today!
+`;
+                filename = 'email-sequence-templates.txt';
+            } else if (type === 'checklist') {
+                content = `ONBOARDING CHECKLIST TEMPLATE
+${'='.repeat(50)}
+
+PRE-LAUNCH
+☐ Define key activation milestones
+☐ Map user journey
+☐ Choose automation tools
+☐ Create email templates
+☐ Set up tracking
+
+TECHNICAL SETUP
+☐ Install chatbot widget
+☐ Connect Zapier automations
+☐ Set up email service
+☐ Configure analytics
+☐ Test all workflows
+
+CONTENT CREATION
+☐ Write welcome emails
+☐ Create help documentation
+☐ Record tutorial videos
+☐ Design in-app guides
+☐ Prepare FAQ responses
+
+LAUNCH
+☐ Test with beta users
+☐ Monitor first 50 signups
+☐ Gather feedback
+☐ Optimize based on data
+☐ Scale gradually
+`;
+                filename = 'onboarding-checklist-template.txt';
+            } else if (type === 'chatbot') {
+                content = `CHATBOT RESPONSE SCRIPTS
+${'='.repeat(50)}
+
+GREETING
+"Hi! 👋 Welcome to [Your SaaS]. I'm here to help you get started. What brings you here today?"
+
+COMMON QUESTIONS:
+
+Q: How do I sign up?
+A: "Great question! Click the 'Sign Up' button in the top right. It takes less than 2 minutes and no credit card is needed to start!"
+
+Q: What does [feature] do?
+A: "[Feature] helps you [benefit]. Here's a quick guide: [link]. Want me to walk you through it?"
+
+Q: How much does it cost?
+A: "We have plans starting at $X/month. Check out our pricing page [link] for full details. Any specific questions about pricing?"
+
+Q: I need help with [issue]
+A: "I'd be happy to help! Can you tell me more about what you're trying to do? Or I can connect you with our support team right away."
+
+Q: Is there a free trial?
+A: "Yes! We offer a [X]-day free trial with full access to all features. No credit card required. Want to start now?"
+
+ESCALATION
+"This is a great question that deserves personal attention. Let me connect you with our team who can help: [contact method]"
+`;
+                filename = 'chatbot-response-scripts.txt';
+            }
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Template downloaded! Check your downloads folder.');
+        }
+    </script>
+</body>
+</html>
